@@ -1,5 +1,6 @@
 package jingou.jo.com.dome;
 
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,7 +15,7 @@ import android.widget.Toast;
 
 import com.lauzy.freedom.lbehaviorlib.behavior.CommonBehavior;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener,DemoAdapter.Onitemclick{
     private RecyclerView mRecyclerView;
     private Toolbar mToolbar;
     private LinearLayout mLayoutBottom;
@@ -27,6 +28,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mToolbar = (Toolbar) findViewById(R.id.toolbar_common);
         mLayoutBottom = (LinearLayout) findViewById(R.id.layout_bottom);
 
+        new DemoAdapter(this).setListten(this);
+
         FloatingActionButton fab2= (FloatingActionButton) findViewById(R.id.fab2_mode);
         fab2.setOnClickListener(this);
         findViewById(R.id.fab_mode).setOnClickListener(this);
@@ -38,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         CommonBehavior.from(fab2).setCanScroll(false);
         loadData();
         diyAnim();
+//        设置跳转事件
+
     }
 
     @Override
@@ -60,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void loadData() {
+        new DemoAdapter(this).setListten(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(new DemoAdapter(this));
         mRecyclerView.addItemDecoration(new DemoItemDecoration(this));
@@ -75,5 +81,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //出现动画的效果new BounceInterpolator()
         CommonBehavior.from(mToolbar).setDuration(500).setInterpolator(new BounceInterpolator());
         CommonBehavior.from(mLayoutBottom).setDuration(600).setInterpolator(new LinearInterpolator());
+    }
+
+    @Override
+    public void Itemclick(View v, int p) {
+        Intent intent = new Intent(MainActivity.this, Main2Activity.class);
+        startActivity(intent);
     }
 }
